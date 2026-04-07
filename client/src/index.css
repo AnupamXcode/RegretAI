@@ -16,6 +16,23 @@
       radial-gradient(circle at 100% 100%, rgba(244, 114, 182, 0.1) 0%, transparent 40%);
     background-attachment: fixed;
   }
+
+  /* Global form element styling */
+  select, textarea, input[type="text"], input[type="number"], input[type="email"], input[type="password"] {
+    @apply bg-gradient-to-br from-slate-700/40 to-slate-800/40 border border-cyan-500/30 text-white placeholder:text-slate-500 transition-all duration-300;
+  }
+
+  select:hover, textarea:hover, input:hover {
+    @apply border-cyan-400/50 from-slate-600/50 to-slate-700/50;
+  }
+
+  select:focus, textarea:focus, input:focus {
+    @apply outline-none border-cyan-400 from-slate-600/60 to-slate-700/60 ring-2 ring-cyan-500/20 shadow-lg shadow-cyan-500/10;
+  }
+
+  select option {
+    @apply bg-slate-800 text-white;
+  }
 }
 
 @layer components {
@@ -41,11 +58,15 @@
   }
   
   .input-field {
-    @apply w-full px-8 py-5 bg-slate-800/40 border border-white/5 rounded-3xl focus:ring-4 focus:ring-cyan-500/10 focus:border-cyan-500 outline-none transition-all text-lg placeholder:text-slate-600;
+    @apply w-full px-8 py-5 bg-gradient-to-br from-cyan-900/20 to-indigo-900/20 border-2 border-cyan-500/30 rounded-3xl focus:ring-4 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all text-lg placeholder:text-slate-400 font-medium hover:border-cyan-400/50 shadow-lg shadow-cyan-500/5;
+  }
+
+  .input-field-small {
+    @apply w-full px-4 py-3 bg-gradient-to-br from-slate-700/50 to-slate-800/50 border-2 border-cyan-500/25 rounded-xl focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-400 outline-none transition-all text-sm placeholder:text-slate-400 font-medium hover:border-cyan-400/50;
   }
   
   .label-text {
-    @apply block text-[10px] font-black text-cyan-400 mb-3 uppercase tracking-[0.4em] opacity-80;
+    @apply block text-[10px] font-black text-cyan-300 mb-3 uppercase tracking-[0.4em] opacity-90;
   }
 
   .text-gradient {
@@ -59,6 +80,29 @@
   .hero-glow {
     filter: drop-shadow(0 0 50px rgba(6, 182, 212, 0.4));
   }
+
+  /* Enhanced select dropdown styling */
+  select {
+    @apply appearance-none cursor-pointer font-semibold;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2306b6d4' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+  }
+
+  /* Enhanced textarea styling */
+  textarea {
+    @apply resize-none;
+  }
+
+  /* Input range styling */
+  input[type="range"] {
+    @apply w-full h-3 bg-gradient-to-r from-slate-700 to-slate-800 rounded-full appearance-none cursor-pointer accent-cyan-400;
+  }
+
+  input[type="range"]:hover {
+    @apply from-slate-600 to-slate-700;
+  }
 }
 
 /* Custom animations and scrollbars */
@@ -71,9 +115,15 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full dark:bg-slate-700;
+  @apply bg-cyan-500/40 rounded-full hover:bg-cyan-500/60;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-400 dark:bg-slate-600;
+  @apply bg-cyan-400/70;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-color: rgba(6, 182, 212, 0.4) transparent;
+  scrollbar-width: thin;
 }

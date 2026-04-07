@@ -6,6 +6,7 @@ import SignupPage from './pages/SignupPage'
 import DashboardPage from './pages/DashboardPage'
 import HistoryPage from './pages/HistoryPage'
 import LandingPage from './pages/LandingPage'
+import IntroductionPage from './pages/IntroductionPage'
 import { AnimatePresence } from 'framer-motion'
 import { Toaster } from 'react-hot-toast'
 
@@ -44,9 +45,17 @@ function App() {
       <main>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            <Route path="/" element={user ? <Navigate to="/dashboard" /> : <LandingPage />} />
+            <Route path="/" element={user ? <Navigate to="/intro" /> : <LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route 
+              path="/intro" 
+              element={
+                <ProtectedRoute>
+                  <IntroductionPage />
+                </ProtectedRoute>
+              } 
+            />
             <Route 
               path="/dashboard" 
               element={

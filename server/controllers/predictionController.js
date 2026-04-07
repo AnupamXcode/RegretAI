@@ -1,6 +1,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const axios = require('axios');
 const mongoose = require('mongoose');
+const Decision = require('../models/Decision');
 
 const emotionScoreMap = { happy: 0.9, neutral: 0.5, confused: 0.35, sad: 0.15, angry: 0.1 };
 const importanceMap = { low: 0, medium: 1, high: 2 };
@@ -51,6 +52,47 @@ const getPrediction = async (req, res) => {
       suggestions: ["Consult a mentor", "Slow down and re-evaluate"],
       aiWisdom,
     };
+
+    // 4. Save to database (history)
+    try {
+      const decisionData = {
+        userId: req.user._id,
+        decisionTitle,
+        description,
+        options: options || [],
+        importance,
+        timeHorizon,
+        riskTolerance,
+        emotion,
+        emotionScore: emotion_score,
+        uncertainty,
+        prediction: {
+          regretProbability: prob,
+          confidence: 88,
+          explanation,
+          suggestions: prediction.suggestions,
+          topFactors: []
+        }
+      };
+
+      if (mongoose.connection.readyState === 1) {
+        const decision = new Decision(decisionData);
+        await decision.save();
+      } else {
+        // Fallback to in-memory storage
+        if (!global.memoryDecisions) global.memoryDecisions = [];
+        const id = new mongoose.Types.ObjectId();
+        global.memoryDecisions.push({
+          _id: id,
+          ...decisionData,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+      }
+    } catch (dbErr) {
+      console.error('Decision save error:', dbErr);
+      // Continue even if save fails
+    }
 
     res.status(201).json({ success: true, ...prediction });
   } catch (err) {
