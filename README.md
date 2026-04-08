@@ -119,16 +119,111 @@ npm install
 npm start
 ```
 4. AI Service
-```
+```bash
 cd ai-model
 pip install -r requirements.txt
 python app.py
-````
-🔐 Environment Variables
-
-Create .env file in server:
 ```
+
+---
+
+## 🔐 Environment Variables
+
+Create `.env` file in `server/`:
+```env
 MONGO_URI=your_mongodb_url
 JWT_SECRET=your_secret_key
 GEMINI_API_KEY=your_api_key
+AI_SERVICE_URL=http://localhost:5001
 ```
+
+Create `.env` in root for Docker Compose:
+```env
+VITE_API_URL=http://localhost:5000
+NODE_ENV=development
+FLASK_ENV=development
+```
+
+---
+
+## 🚀 Deployment
+
+RegretAI can be deployed using:
+- **GitHub Pages** (Frontend)
+- **Render.com** (Backend)
+- **Railway.app** (AI Model)
+- **Docker** (All services)
+
+### Quick Deploy (Recommended)
+
+See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for complete instructions on:
+- ✅ GitHub Pages deployment
+- ✅ Render.com setup
+- ✅ Railway.app configuration
+- ✅ Docker Compose
+- ✅ Environment setup
+- ✅ Troubleshooting
+
+### Docker Deployment (Local Testing)
+
+```bash
+# Build and run all services
+docker-compose up --build
+
+# Services will be available at:
+# Frontend: http://localhost:5173
+# Backend: http://localhost:5000
+# AI Model: http://localhost:5001
+```
+
+### GitHub Actions CI/CD
+
+Push to `main` branch to trigger automatic deployment:
+```bash
+git add .
+git commit -m "Deploy to production"
+git push origin main
+```
+
+---
+
+## 🤝 Contributing
+
+1. Fork repository
+2. Create feature branch: `git checkout -b feature/new-feature`
+3. Commit changes: `git commit -m "Add new feature"`
+4. Push branch: `git push origin feature/new-feature`
+5. Open pull request
+
+---
+
+## 📝 License
+
+MIT License - See LICENSE file for details
+
+---
+
+## 👨‍💻 Author
+
+**Anupam Shrivastava** - [GitHub](https://github.com/AnupamXcode)
+
+---
+
+## 📧 Support
+
+For issues, questions, or suggestions:
+1. Open an [GitHub Issue](https://github.com/AnupamXcode/RegretAI/issues)
+2. Email: anupam@example.com
+3. Check [Troubleshooting Guide](./DEPLOYMENT_GUIDE.md#troubleshooting)
+
+---
+
+## 🎯 Roadmap
+
+- [ ] Mobile app (React Native)
+- [ ] Advanced analytics dashboard
+- [ ] Collaborative decision-making
+- [ ] API for third-party integrations
+- [ ] Premium ML models
+- [ ] Real-time notifications
+- [ ] Multi-language support

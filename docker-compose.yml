@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # MongoDB Database (optional, for future scaling)
+  # mongodb:
+  #   image: mongo:7.0
+  #   container_name: regretai-mongodb
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongodb_data:/data/db
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: admin
+  #     MONGO_INITDB_ROOT_PASSWORD: password
+
+  # Flask AI Model Service
+  ai-model:
+    build:
+      context: .
+      dockerfile: ai-model/Dockerfile
+    container_name: regretai-ai-model
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_ENV=production
+      - FLASK_APP=app.py
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Node.js Backend Service
+  backend:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: regretai-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - AI_SERVICE_URL=http://ai-model:5001
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017/regretai
+    depends_on:
+      ai-model:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # React Frontend Service
+  frontend:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    container_name: regretai-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://backend:5000
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  # mongodb_data:
+
+networks:
+  default:
+    name: regretai-network
